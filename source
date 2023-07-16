@@ -1,0 +1,58 @@
+import random
+from time import sleep
+
+smile_face = list('0000001010100010111000000')
+netral_face = list('0000001010000001111100000')
+sad_face = list('0000001010000000111010001')
+
+faces = [smile_face, netral_face, sad_face]
+
+tema = 0
+n_sensor = 25
+
+weights = [0 for i in range(n_sensor)]
+
+def perceptron(Sensor):
+    b = 0.5
+    s = 0
+    for i in range(n_sensor):
+        s += int(Sensor[i]) * weights[i]
+    if s >= b:
+        return True
+    else:
+        return False
+        
+def decrease(number):
+    for i in range(n_sensor):
+        if int(number[i]) == 1:
+            weights[i] -= 1
+
+def increase(number):
+    for i in range(n_sensor):
+        if int(number[i]) == 1:
+            weights[i] += 1
+
+n = 100
+for i in range(n):
+    j = random.randint(0,2)
+    r = perceptron(faces[j])
+
+    if j != tema:
+        if r:
+            decrease(faces[j])
+
+    else:
+        if not r:
+            increase(faces[tema])
+            
+print('PERCEPTRON LEARNING...')
+sleep(2)
+l = 0
+for i in range(11):
+    print(str(l) + '%')
+    l += 10
+    sleep(0.2)
+sleep(1)
+print('Smile_face is smile_face? ', perceptron(smile_face))
+print('Netral_face is Netral_face? ', perceptron(netral_face))
+print('Sad_face is Sad_face? ', perceptron(sad_face))
